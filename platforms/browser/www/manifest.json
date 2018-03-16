@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "All at hand",
+  "short_name": "All at hand",
+  "version": "com.uad.allathand",
+  "description": "una app",
+  "author": "David",
+  "icons": [],
+  "start_url": "index.html"
+}

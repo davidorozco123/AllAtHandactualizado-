@@ -1,0 +1,94 @@
+
+<html ng-app="app" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>All at hand | Añadir producto</title>
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+
+  <script src="js/angular.min.js"></script>
+</head>
+
+<body ng-controller="HttpGetController" class="bg-dark">
+  <div class="container">
+    <div class="card card-register mx-auto mt-5">
+      <div class="card-header">Agregar un producto</div>
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="exampleInputName">Nombre del producto</label>
+               <input ng-model="nombre" name="nombre" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="nombre del producto">
+              </div>
+              <div class="col-md-6">
+                <label for="exampleInputLastName">Tipo</label>
+              <input ng-model="tipo" name="tipo" class="form-control" id="exampleInputLastName" type="text" aria-describedby="nameHelp" placeholder="Ingrese el tipo de producto">
+              </div>
+            </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Descripción</label>
+           <input ng-model="descripcion" name="descripcion" class="form-control" id="exampleInputEmail1" type="text" aria-describedby="nameHelp" placeholder="Descripción del producto">
+          </div>
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="exampleInputPassword1">Existencia</label>
+               <input ng-model="existencia" name="existencia" class="form-control" id="exampleInputPassword1" type="text" placeholder="ingrese existencia inicial">
+              </div>
+            </div>
+          </div>
+          <a class="btn btn-primary btn-block" ng-click="SendData()" href="index.html" >Crear producto</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    var app = angular.module("app", []);
+    app.controller("HttpGetController", function ($scope, $http) {
+
+        $scope.SendData = function () {
+          var data = {
+                nombre: $scope.nombre,
+                tipo: $scope.tipo,
+                descripcion:$scope.descripcion,
+                existencia:$scope.existencia
+            }
+
+            console.log(data)
+
+            $http.post('http://allathand.org/api/api.php/productos', data)/*http://allathand.org/api/api.php/productos*/
+            .then(function successCallback(response) {
+              // this callback will be called asynchronously
+              // when the response is available
+              $scope.PostDataResponse = response;
+              console.log(response)
+            }, function errorCallback(response) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              console.log('Hubo un error endemoniado')
+            });
+
+        };
+
+    });
+
+</script>
+  <!-- Bootstrap core JavaScript-->
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+</body>
+
+</html>
