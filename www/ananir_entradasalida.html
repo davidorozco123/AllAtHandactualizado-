@@ -14,11 +14,13 @@
   <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
+  <!-- material desing-->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
-  <script src="js/angular.min.js"></script>
+  <!--<script src="js/angular.min.js"></script>-->
 </head>
 
-<body ng-controller="HttpGetController" class="bg-dark">
+<body ng-app="app" ng-controller="HttpGetController" class="bg-dark">
   <div class="container">
     <div class="card card-register mx-auto mt-5">
       <div class="card-header">Agregar una entrada o salida</div>
@@ -29,51 +31,78 @@
             <div class="form-row">
               <div class="col-md-6">
                 <label>Tipo</label> </br>
-              <!-- <input ng-model="tipo" name="tipo" class="form-control" id="exampleInputPassword1" type="text" placeholder="ingrese el tipo">-->
-               <input type="radio"  id="entrada" ng-model="tipo" value="entrada"><label for="entrada"> Entrada</label>
 
+              <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
-               <input type="radio" ng-model="tipo" value="salida" id="salida"><label for="salida">Salida</label>
-
+              <md-radio-group ng-model="data.group1">
+                  <md-radio-button value="entrada" class="md-primary">Entrada</md-radio-button>
+                  <md-radio-button value="salida"> Salida </md-radio-button>
+              </md-radio-group>
               </div>
             </div>
           </div>
           <div class="form-row">
             <div class="col-md-6">
-              <label for="exampleInputPassword1">Cantidad</label>
-             <input ng-model="cantidad" name="cantidad" class="form-control" id="exampleInputPassword1" type="text" placeholder="ingrese la cantidad">
-            </div>
+            <md-input-container class="md-block" flex-gt-sm>
+             <label>Cantidad</label>
+             <input name="cantidad" ng-model="cantidad" placeholder="1000" required  md-maxlength="4">
+             <div ng-messages="userForm.cantidad.$error" role="alert" multiple>
+               <div ng-message="required" class="my-message">Debes ingresar una cantidad de producto.</div>
+               </div>
+               <div ng-message="md-maxlength" class="my-message">
+                     Estas exediendo el limite disponible
+               </div>
           </div>
-          <div class="form-row">
-            <div class="col-md-6">
-              <label for="exampleInputPassword1">Id producto</label>
-             <input ng-model="id_productos" name="id_productos" class="form-control" id="exampleInputPassword1" type="text" placeholder="ingrese el id del producto">
-            </div>
-          </div>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Producto</label>
+            <md-select ng-model="producto_id">
+              <md-option  ng-repeat="producto in productos" value="{{producto.id}}">
+                    {{producto.nombre}}
+              </md-option>
+            </md-select>
+          </md-input-container>
         </div>
-          <a class="btn btn-primary btn-block" ng-click="SendData()" href="entradas_salidas.html" >Crear entrada o salida</a>
+          <button class="btn btn-primary btn-block" ng-click="SendData()" href="entradas_salidas.html">Crear entrada o salida</a>
         </form>
       </div>
     </div>
   </div>
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
   <script>
-    var app = angular.module("app", []);
+    var app = angular.module("app", ['ngMaterial']);
     app.controller("HttpGetController", function ($scope, $http) {
       $scope.tipo="salida"
 
+      $scope.cargar_productos = function() {
+        $http.get("api/api.php/productos"/*http://allathand.org/api/api.php/productos*/)
+              .then(function (response) {
+             $scope.productos = response.data;
+             console.log(response.data);
+           });
+      }
+
+      $scope.cargar_productos()
+
+
         $scope.SendData = function () {
           var data = {
-
-
               tipo: $scope.tipo,
               cantidad:$scope.cantidad,
-              id_productos:$scope.id_productos,
+              id_productos:$scope.producto_id,
               hora:new Date(),
             }
 
             console.log(data)
 
-            $http.post('http://allathand.org/api/api.php/entradas_salidas', data)/*http://allathand.org/api/api.php/productos*/
+            $http.post('api/api.php/entradas_salidas', data)/*http://allathand.org/api/api.php/productos*/
             .then(function successCallback(response) {
               // this callback will be called asynchronously
               // when the response is available
@@ -96,6 +125,7 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
 </body>
 
 </html>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>All at hand | Entradas y Salidas</title>
+  <title>All at hand | Lista de productos</title>
   <!-- Bootstrap core CSS-->
   <link rel="stylesheet"; href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
 
@@ -26,16 +26,24 @@
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
 
-    <a class="navbar-brand" href="#">All at hand</a>
+    <a class="navbar-brand" href="">All at hand</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="productos.html">
+          <a class="nav-link" href="tables.html">
             <i class="fa fa-fw fa-table"></i>
             <span class="nav-link-text">Productos</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="entradas_salidas.html">
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">entradas y salidas</span>
           </a>
         </li>
       </ul>
@@ -48,36 +56,36 @@
         <li class="breadcrumb-item">
           <a>All at hand</a>
         </li>
-        <li class="breadcrumb-item active">Entradas y salidas</li>
+        <li class="breadcrumb-item active">Productos</li>
       </ol>
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-table"></br></i>Entradas y salidas</div>
+          <i class="fa fa-table"></i>productos</div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered"  width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Id</th>
-                  <th>Producto</th>
+                  <th>id</th>
+                  <th>Nombre</th>
                   <th>Tipo</th>
-                  <th>Hora</th>
-                  <th>Cantidad</th>
+                  <th>Existencia</th>
+                  <th>Descripción</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
                 <tr ng-repeat="producto in productos">
                   <td>{{producto.id}}</td>
-                  <td>({{producto.id_productos}}) {{producto.nombre_del_producto}}</td>
+                  <td>({{producto.id}}) {{producto.nombre}}</td>
                   <td>{{producto.tipo}}</td>
-                  <td>{{producto.hora}}</td>
-                  <td>{{producto.cantidad}}</td>
-                  <th><div><a class="btn btn-block" ng-click="delete_data(producto.id)" href="">Eliminar entrada o salida</a></div></th>
+                  <td>{{producto.existencia}}</td>
+                  <td>{{producto.descripcion}}</td>
+                  <th><div><a class="btn btn-block" href="modificar_producto.html?q={{producto.id}}">Modificar producto</a></div><div><a class="btn btn-block" ng-click="delete_data(producto.id)" href="">Archivar producto</a></div></th>
                 </tr>
 
             </table>
-            <div> <a class="btn btn-primary btn-block" href="ananir_entradasalida.html">Crear entrada o salida</a></div>
+            <div> <a class="btn btn-primary btn-block" href="anadir_producto.html">Crear producto</a></div>
           </div>
         </div>
       </div>
@@ -117,17 +125,18 @@
           var app = angular.module('allathand', []);
           app.controller('main', function($scope, $http) {
              $scope.delete_data=function(id){
-               $http.delete("api/api.php/entradas_salidas/"+id/*http://allathand.org/api/api.php/productos*/)
+               $http.delete("api/api.php/productos/"+id/*http://allathand.org/api/api.php/productos*/)
                 .then(function (response) {
                     console.log(response.data)
                     $scope.cargar_productos()
                }, function errorCallback(){
                    console.log('Hubo un error')
                  });
+               console.log(id)
              }
 
              $scope.cargar_productos = function() {
-               $http.get("api/api.php/entradas_salidas"/*http://allathand.org/api/api.php/productos*/)
+               $http.get("api/api.php/productos"/*http://allathand.org/api/api.php/productos*/)
                  .then(function (response) {
                     $scope.productos = response.data;
                     console.log(response.data);
@@ -135,7 +144,7 @@
              }
 
              $scope.cargar_productos()
-  
+   
           });
     </script>
 

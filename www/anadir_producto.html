@@ -14,7 +14,6 @@
   <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
-
   <script src="js/angular.min.js"></script>
 </head>
 
@@ -42,16 +41,21 @@
           <div class="form-group">
             <div class="form-row">
               <div class="col-md-6">
-                <label for="exampleInputPassword1">Existencia</label>
-               <input ng-model="existencia" name="existencia" class="form-control" id="exampleInputPassword1" type="text" placeholder="ingrese existencia inicial">
+                <label>Cantidad</label>
+                <input name="cantidad" ng-model="cantidad" placeholder="1000" required  md-maxlength="4">
+                <div ng-messages="userForm.cantidad.$error" role="alert" multiple>
+                  <div ng-message="required" class="my-message">Debes ingresar una cantidad de producto.</div>
+              </div>
+
               </div>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" ng-click="SendData()" href="index.html" >Crear producto</a>
+          <a class="btn btn-primary btn-block" ng-click="SendData()" href="productos.html" >Crear producto</a>
         </form>
       </div>
     </div>
   </div>
+
   <script>
     var app = angular.module("app", []);
     app.controller("HttpGetController", function ($scope, $http) {
@@ -66,7 +70,7 @@
 
             console.log(data)
 
-            $http.post('http://allathand.org/api/api.php/productos', data)/*http://allathand.org/api/api.php/productos*/
+            $http.post('api/api.php/productos', data)/*http://allathand.org/api/api.php/productos*/
             .then(function successCallback(response) {
               // this callback will be called asynchronously
               // when the response is available
@@ -83,6 +87,7 @@
     });
 
 </script>
+
   <!-- Bootstrap core JavaScript-->
 
   <script src="vendor/jquery/jquery.min.js"></script>

@@ -1,5 +1,6 @@
 <?php
   // get the HTTP method, path and body of the request
+  require_once('config.php');
   $method = $_SERVER['REQUEST_METHOD'];
   $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
   $input = json_decode(file_get_contents('php://input'),true);
@@ -7,9 +8,9 @@
 
   // connect to the mysql database
   //godaddy
-  $link = mysqli_connect('localhost', 'jumpingjacks123', 'Metacaroteno123', 'allathand_db') or die ("No pudo conectarse");
+  //$link = mysqli_connect('localhost', 'jumpingjacks123', 'Metacaroteno123', 'allathand_db') or die ("No pudo conectarse");
   //local
-  //$link = mysqli_connect('localhost', 'root', '', 'allathand_db') or die ("No pudo conectarse");
+$link = mysqli_connect(DB_SERVER, DB_USER, DB_PWD, DB_NAME) or die ("No pudo conectarse");
     mysqli_set_charset($link,'utf8');
   // retrieve the table and key from the path
   $table = preg_replace('/[^a-z0-9_]+/i','',array_shift($request));
@@ -63,7 +64,12 @@
     case 'DELETE':
       $sql = "delete from `$table` where id=$key"; break;
   }
-
+  if($table==='entradas_salidas'&& $method==='GET'){
+    $sql = "SELECT entradas_salidas.`id`, entradas_salidas.`id_productos`,
+          productos.nombre AS 'nombre_del_producto',entradas_salidas.`tipo`,
+          entradas_salidas.`hora`, entradas_salidas.`cantidad` FROM `entradas_salidas`
+          JOIN productos ON entradas_salidas.id_productos=productos.id";
+  }
 
   // excecute SQL statement
   $result = mysqli_query($link,$sql);
